@@ -1,0 +1,10 @@
+.idea/
+*.xcodeproj/
+*.xcassets
+*.lproj
+*.sks
+*.plist
+.DS_Store
+
+silver-adventureTests/
+silver-adventureUITests/
