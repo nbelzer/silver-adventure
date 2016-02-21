@@ -25,7 +25,7 @@ class Tile: Hexagon {
     sprite.xScale = 0.2;
     sprite.yScale = sprite.xScale;
     sprite.colorBlendFactor = 1.0;
-    sprite.color = UIColor(red: CGFloat(height), green: CGFloat(height), blue: CGFloat(height), alpha: 1)
+    sprite.color = UIColor(red: CGFloat(height), green: 0.4, blue: 0.5, alpha: 1)
     
     self.height = height;
   }

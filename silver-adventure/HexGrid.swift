@@ -16,7 +16,7 @@ class HexGrid {
   let node: SKNode;
   
   init(toNode: SKNode) {
-    random = GKRandomDistribution(lowestValue: 0, highestValue: 100);
+    random = GKGaussianDistribution(randomSource: GKRandomSource(), mean: 9, deviation: 3)
     node = toNode;
   }
   
