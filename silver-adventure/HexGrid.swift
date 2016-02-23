@@ -12,11 +12,9 @@ class HexGrid {
   let generator: GridGenerator = GridGenerator();
   var grid = [Axialcoordinate: Tile]()
   
-  let random: GKRandomDistribution;
   let node: SKNode;
   
   init(toNode: SKNode) {
-    random = GKGaussianDistribution(randomSource: GKRandomSource(), mean: 9, deviation: 3)
     node = toNode;
   }
   
@@ -24,6 +22,7 @@ class HexGrid {
     for (_, hex) in grid {
       hex.sprite.removeFromParent();
     }
+    grid = [:];
 
     generator.createGrid(size, createHexagon: createHexagon);
 
@@ -36,7 +35,7 @@ class HexGrid {
     }
   }
   
-  func createHexagon(atPosition: Axialcoordinate) {
-    grid[atPosition] = Tile(atCoordinate: atPosition, height: random.nextUniform());
+  func createHexagon(atPosition: Axialcoordinate, typeof: TileType) {
+    grid[atPosition] = Tile(atCoordinate: atPosition, tileType: typeof);
   }
 }
