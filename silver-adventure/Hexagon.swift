@@ -16,14 +16,14 @@ enum TileType {
   case Land
   case Mountain
   
-  func getColor() -> UIColor {
+  func getColor() -> (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) {
     switch(self) {
     case .Land:
-      return UIColor(hue: 0.32, saturation: 0.5, brightness: 0.6, alpha: 1.0);
+      return (hue: 0.32, saturation: 0.5, brightness: 0.6, alpha: 1.0);
     case .Water:
-      return UIColor(hue: 0.55, saturation: 0.53  , brightness: 0.62, alpha: 1.0)
+      return (hue: 0.55, saturation: 0.53  , brightness: 0.62, alpha: 1.0)
     case .Mountain:
-      return UIColor(hue: 0, saturation: 0.0, brightness: 0.5, alpha: 1.0)
+      return (hue: 0, saturation: 0.0, brightness: 0.5, alpha: 1.0)
     }
   }
   
@@ -64,6 +64,10 @@ class Tile: Hexagon {
     sprite.xScale = 0.2;
     sprite.yScale = sprite.xScale;
     sprite.colorBlendFactor = 1.0;
-    sprite.color = tileType.getColor();
+    let color = tileType.getColor();
+    sprite.color = UIColor(hue: color.hue,
+                           saturation: color.saturation,
+                           brightness: color.brightness + CGFloat(arc4random_uniform(10))/100,
+                           alpha: color.alpha)
   }
 }
