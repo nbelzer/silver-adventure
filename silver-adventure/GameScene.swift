@@ -20,12 +20,12 @@ class GameScene: SKScene {
     self.addChild(centerNode)
     
     grid = HexGrid(toNode: centerNode)
-    grid.createGrid(10);
+    grid.createGrid(8);
   }
 
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     /* Called when a touch begins */
-    grid.createGrid(10)
+    grid.createGrid(8)
   }
 
   override func update(currentTime: CFTimeInterval) {

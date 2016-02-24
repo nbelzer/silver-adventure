@@ -25,6 +25,7 @@ class GridGenerator {
     addLayer(withSize, layerType: TileType.Mountain)
     
     replaceGroups(TileType.Water, replaceWith: TileType.Land, replaceWhenSmaller: 3);
+    replaceGroups(TileType.Mountain, replaceWith: TileType.Land, replaceWhenSmaller: 2)
     
     buildGrid(createHexagon);
   }

@@ -9,7 +9,7 @@
 import UIKit
 import Darwin
 
-let hexSize: Double = 15.8// 40.0
+let hexSize: Double = 15.8 // 40.0 15.8
 let directions = [Axialcoordinate(q: +1, r: 0), Axialcoordinate(q: +1, r: -1), Axialcoordinate(q: 0, r: -1), Axialcoordinate(q: -1, r: 0), Axialcoordinate(q: -1, r: +1), Axialcoordinate(q: 0, r: +1)];
 
 extension Axialcoordinate {
