@@ -44,7 +44,7 @@ func +(left: Cubecoordinate, right: Cubecoordinate) -> Cubecoordinate {
 /// - Returns: Returns all the neighbours of the given coordiante.
 func getNeighbours(coordinate: Axialcoordinate) -> [Axialcoordinate] {
   var neighbours = [Axialcoordinate]()
-  for i in 0...6 {
+  for i in 0..<6 {
     neighbours.append(coordinate + directions[i])
   }
   return neighbours

@@ -24,6 +24,8 @@ class GridGenerator {
     addLayer(withSize, layerType: TileType.Land)
     addLayer(withSize, layerType: TileType.Mountain)
     
+    replaceGroups(TileType.Water, replaceWith: TileType.Land, replaceWhenSmaller: 3);
+    
     buildGrid(createHexagon);
   }
   
@@ -51,6 +53,55 @@ class GridGenerator {
         tempGrid[atPosition] = layerType
       }
     }
+  }
+  
+  func replaceGroups(ofType: TileType, replaceWith: TileType, replaceWhenSmaller: Int) {
+    let groups = groupLayer(ofType);
+    
+    for group in groups {
+      if (group.count < replaceWhenSmaller) {
+        for axial in group {
+          tempGrid[axial] = replaceWith;
+        }
+      }
+    }
+  }
+  
+  func groupLayer(ofType: TileType) -> [[Axialcoordinate]] {
+    var groups: [[Axialcoordinate]] = [];
+    var searched: [Axialcoordinate] = [];
+    
+    for (axial, type) in tempGrid {
+      if type == ofType {
+        if (!searched.contains(axial)) {
+          let area = checkArea(axial, ofType: ofType);
+          searched.appendContentsOf(area);
+          groups.append(area);
+        }
+      }
+    }
+    
+    return groups;
+  }
+  
+  func checkArea(atPosition: Axialcoordinate, ofType: TileType) -> [Axialcoordinate] {
+    var candidates: [Axialcoordinate] = [atPosition];
+    var area: [Axialcoordinate] = [];
+    
+    while candidates.count > 0 {
+      if let coordinate = candidates.popLast() {
+        if !area.contains(coordinate) {
+          if let type = tempGrid[coordinate] {
+            if (type == ofType) {
+              area.append(coordinate);
+              candidates.appendContentsOf(getNeighbours(coordinate));
+            }
+          }
+        }
+      }
+    }
+    
+    return area;
   }
   
   func buildGrid(createHexagon:(atPosition: Axialcoordinate, typeof: TileType)->()) {
