@@ -8,6 +8,7 @@
 
 import Foundation
 import GameplayKit
+import UIKit;
 
 class Pathfinder {
   
@@ -36,5 +37,23 @@ class Pathfinder {
     }
     
     nodeGraph.addNodes(nodes);
+  }
+  
+  // TEMPORARY
+  var highlightedNodes: [GKGraphNode] = [];
+  func showPath(fromNode: GKGraphNode2D, toNode: GKGraphNode2D) {
+    for node in highlightedNodes {
+      if let tile = node as? Tile {
+        tile.highlightSprite.color = tile.originalColor;
+      }
+    }
+    
+    let nodes = nodeGraph.findPathFromNode(fromNode, toNode: toNode)
+    for node in nodes {
+      if let tile = node as? Tile {
+        tile.highlightSprite.color = UIColor.orangeColor();
+      }
+    }
+    highlightedNodes = nodes;
   }
 }

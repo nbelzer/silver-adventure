@@ -66,11 +66,19 @@ enum TileType {
   }
 }
 
-class Tile: GKGraphNode2D, Hexagon {
+protocol Highlightable {
+  var highlightSprite: SKSpriteNode { get };
+  var originalColor: UIColor { get set };
+}
+
+class Tile: GKGraphNode2D, Hexagon , Highlightable {
   
   let sprite: SKSpriteNode;
   var coordinate: Axialcoordinate;
   let tileType: TileType;
+  
+  var highlightSprite: SKSpriteNode;
+  var originalColor: UIColor;
   
   init(atCoordinate: Axialcoordinate, tileType: TileType) {
     let worldPosition = atCoordinate.toWorld();
@@ -88,6 +96,19 @@ class Tile: GKGraphNode2D, Hexagon {
                            saturation: color.saturation,
                            brightness: color.brightness + CGFloat(arc4random_uniform(10))/100,
                            alpha: color.alpha)
+    
+    highlightSprite = SKSpriteNode(imageNamed: "Hexagon");
+    sprite.addChild(highlightSprite);
+    highlightSprite.xScale = 0.4
+    ;
+    highlightSprite.yScale = highlightSprite.xScale;
+    highlightSprite.colorBlendFactor = 1.0;
+    var alpha: CGFloat = 0.2;
+    if (tileType != .Land) {
+      alpha = 0.05;
+    }
+    originalColor = UIColor(hue: 0, saturation: 0, brightness: 100, alpha: alpha);
+    highlightSprite.color = originalColor;
     
     super.init(point: vector_float2(Float(worldPosition.x), Float(worldPosition.y)));
   }

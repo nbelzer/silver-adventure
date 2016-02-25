@@ -27,7 +27,13 @@ class GameScene: SKScene {
 
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     /* Called when a touch begins */
-//    grid.createGrid(10)
+    for touch in touches {
+      let touchPoint = touch.locationInNode(grid.node);
+      let touchPos = toAxial((x: Int(touchPoint.x), y: Int(touchPoint.y)))
+      if let toNode = grid.grid[touchPos] {
+        grid.pathfinder.showPath(grid.grid[Axialcoordinate(q: 3, r: 3)]!, toNode: toNode)
+      }
+    }
   }
   
   override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {

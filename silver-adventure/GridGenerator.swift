@@ -12,8 +12,8 @@ class GridGenerator {
   private var tempSize: Int = 1;
   let random: GKRandomDistribution;
   
-  init() {
-    random = GKGaussianDistribution(randomSource: GKRandomSource(), mean: 9, deviation: 3)
+  init(seed: NSData) {
+    random = GKGaussianDistribution(randomSource: GKARC4RandomSource(seed: seed), mean: 9, deviation: 3)
   }
 
   func createGrid(withSize: Int, createHexagon:(atPosition: Axialcoordinate, typeof: TileType)->()) {
