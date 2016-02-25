@@ -55,26 +55,40 @@ enum TileType {
       return 0.6;
     }
   }
+  
+  var walkable: Bool {
+    switch (self) {
+    case .Land:
+      return true;
+    default:
+      return false;
+    }
+  }
 }
 
-class Tile: Hexagon {
+class Tile: GKGraphNode2D, Hexagon {
   
   let sprite: SKSpriteNode;
   var coordinate: Axialcoordinate;
   let tileType: TileType;
   
   init(atCoordinate: Axialcoordinate, tileType: TileType) {
+    let worldPosition = atCoordinate.toWorld();
+    
     self.coordinate = atCoordinate;
     self.tileType = tileType;
     sprite = SKSpriteNode(imageNamed: "Hexagon");
-    sprite.position = coordinate.toWorld();
+    sprite.position = worldPosition;
     sprite.xScale = 0.2;
     sprite.yScale = sprite.xScale;
     sprite.colorBlendFactor = 1.0;
+    
     let color = tileType.getColor();
     sprite.color = UIColor(hue: color.hue,
                            saturation: color.saturation,
                            brightness: color.brightness + CGFloat(arc4random_uniform(10))/100,
                            alpha: color.alpha)
+    
+    super.init(point: vector_float2(Float(worldPosition.x), Float(worldPosition.y)));
   }
 }

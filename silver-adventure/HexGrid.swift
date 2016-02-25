@@ -10,6 +10,7 @@ import GameKit
 class HexGrid {
 
   let generator: GridGenerator = GridGenerator();
+  let pathfinder: Pathfinder = Pathfinder();
   var grid = [Axialcoordinate: Tile]()
   
   let node: SKNode;
@@ -27,6 +28,15 @@ class HexGrid {
     generator.createGrid(size, createHexagon: createHexagon);
 
     addToNode(node)
+    
+    pathfinder.createNodeGraph(self);
+    
+    let nodes = pathfinder.nodeGraph.findPathFromNode(grid[Axialcoordinate(q: 3,r: 3)]!, toNode: grid[Axialcoordinate(q: -3,r: -3)]!)
+    for node in nodes {
+      if let tile = node as? Tile {
+        tile.sprite.color = UIColor.orangeColor();
+      }
+    }
   }
   
   func addToNode(node: SKNode) {
