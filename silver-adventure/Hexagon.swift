@@ -1,6 +1,6 @@
 //
 // Created by Nick Belzer on 02/02/16.
-// Copyright (c) 2016 Nick Belzer. All rights reserved.
+// Copyright (c) 2016 Nick Belzer. 
 //
 
 import Foundation
@@ -14,6 +14,7 @@ protocol Hexagon {
 enum TileType {
   case Water
   case Land
+//  case Sand
   case Mountain
   
   func getColor() -> (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) {
@@ -21,7 +22,9 @@ enum TileType {
     case .Land:
       return (hue: 0.32, saturation: 0.5, brightness: 0.6, alpha: 1.0);
     case .Water:
-      return (hue: 0.55, saturation: 0.53  , brightness: 0.62, alpha: 1.0)
+      return (hue: 0.55, saturation: 0.53, brightness: 0.62, alpha: 1.0)
+//    case .Sand:
+//      return (hue: 0.14, saturation: 0.32, brightness: 0.62, alpha: 1.0)
     case .Mountain:
       return (hue: 0, saturation: 0.0, brightness: 0.5, alpha: 1.0)
     }
@@ -33,6 +36,8 @@ enum TileType {
       return 0.8;
     case .Water:
       return 0.0;
+//    case .Sand:
+//      return 0.0;
     case .Mountain:
       return 2.5;
     }
@@ -44,6 +49,8 @@ enum TileType {
       return 0.8;
     case .Water:
       return 1.0;
+//    case .Sand:
+//      return 0.0;
     case .Mountain:
       return 0.6;
     }

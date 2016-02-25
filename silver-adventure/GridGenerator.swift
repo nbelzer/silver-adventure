@@ -27,6 +27,9 @@ class GridGenerator {
     replaceGroups(TileType.Water, replaceWith: TileType.Land, replaceWhenSmaller: 3);
     replaceGroups(TileType.Mountain, replaceWith: TileType.Land, replaceWhenSmaller: 2)
     
+//    replaceTilesNeighbouring(TileType.Water, with: TileType.Sand, amountOfNeighbours: 3);
+//    replaceGroups(TileType.Sand, replaceWith: TileType.Land, replaceWhenSmaller: 2)
+    
     buildGrid(createHexagon);
   }
   
@@ -103,6 +106,26 @@ class GridGenerator {
     }
     
     return area;
+  }
+  
+  func replaceTilesNeighbouring(tileType: TileType, with: TileType, amountOfNeighbours: Int) {
+    
+    for (axial, type) in tempGrid {
+      if (type != tileType) {
+        var amount = 0;
+        for neighbour in getNeighbours(axial) {
+          if let neighbouringHex = tempGrid[neighbour] {
+            if (neighbouringHex == tileType) {
+              amount += 1;
+            }
+          }
+        }
+        
+        if (amount >= amountOfNeighbours) {
+          tempGrid[axial] = with;
+        }
+      }
+    }
   }
   
   func buildGrid(createHexagon:(atPosition: Axialcoordinate, typeof: TileType)->()) {
