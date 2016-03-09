@@ -1,0 +1,2 @@
+*.sln filter=lfs -text
+*.csproj filter=lfs -text
