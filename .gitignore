@@ -4,5 +4,9 @@ silver-adventure/Library/
 silver-adventure/ProjectSettings/
 silver-adventure/Temp/
 silver-adventure/obj/
+silver-adventure/Assets/Plugins/
 *.meta
 *.userprefs
+*.sln.iml
+*.csproj.DotSettings
+*.swp
