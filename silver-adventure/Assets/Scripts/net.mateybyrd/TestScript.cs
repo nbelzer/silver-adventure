@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TestScript : MonoBehaviour {
+namespace Net.Mateybyrd {
+  
+  public class TestScript : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		Debug.Log ("Hello world");
-	}
+    // Use this for initialization
+    void Start () {
+      Debug.Log ("Hello world");
+    }
 
-	// Update is called once per frame
-	void Update () {
-
-	}
+    // Update is called once per frame
+    void Update () { 
+        
+    }
+  }
 }
+
