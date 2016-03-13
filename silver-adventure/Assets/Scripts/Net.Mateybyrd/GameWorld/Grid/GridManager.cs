@@ -6,15 +6,15 @@ namespace Net.Mateybyrd.GameWorld.Grid {
   /// <summary>
   ///   This class contains a grid manager that can be given any type of tile   to manage
   /// </summary>
-  public class GridManager<T, TK> where T : Tile<TK> {
+  public class GridManager<T> {
 
     // The actual grid stored in a dictionary.
-    private readonly Dictionary<TK, T> _tiles = new Dictionary<TK, T>();
+    private readonly Dictionary<T, Tile<T>> _tiles = new Dictionary<T, Tile<T>>();
 
     /// <summary>
     /// Adds a tile to the grid, if the item could not be added an error will be displayed
     /// </summary>
-    public void AddTile(T tile) {
+    public void AddTile(Tile<T> tile) {
       try {
         _tiles.Add(tile.GridPosition, tile);
       } catch (Exception e) {
@@ -26,7 +26,7 @@ namespace Net.Mateybyrd.GameWorld.Grid {
     /// Returns a tile of the type that was given to this GridManager instance.
     /// If the item could not be found an error will be displayed.
     /// </summary>
-    public T GetTileAt(TK position) {
+    public Tile<T> GetTileAt(T position) {
       try {
         return _tiles[position];
       } catch (Exception e) {
