@@ -34,5 +34,9 @@ namespace Net.Mateybyrd.GameWorld.Grid {
         return null;
       }
     }
+    
+    public Dictionary<T, Tile<T>> GetGrid() {
+      return _tiles;
+    }
   }
 }
