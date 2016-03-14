@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Net.Mateybyrd.GameWorld.Grid
@@ -14,7 +15,7 @@ namespace Net.Mateybyrd.GameWorld.Grid
       public abstract T[] GetNeighbours();
     }
 
-    public class GridPosition: Position<GridPosition> {
+    public class GridPosition: Position<GridPosition>, IEquatable<GridPosition> {
 
       // Store position
       public int XPos, YPos;
@@ -33,9 +34,27 @@ namespace Net.Mateybyrd.GameWorld.Grid
       public override GridPosition[] GetNeighbours() {
         return Neighbours.Select(neighbour => new GridPosition(XPos + neighbour.XPos, YPos + neighbour.YPos)).ToArray();
       }
+
+      public bool Equals(GridPosition pos) {
+        return (XPos == pos.XPos && YPos == pos.YPos);
+      }
+
+      public override bool Equals(object o) {
+        return Equals(o as GridPosition);
+      }
+
+      public override int GetHashCode() {
+        unchecked {
+          return (XPos*397) ^ YPos;
+        }
+      }
+
+      public override string ToString() {
+        return "Grid [ " + XPos + ", " + YPos + "]";
+      }
     }
 
-    public class CubePosition: Position<CubePosition> {
+    public class CubePosition: Position<CubePosition>, IEquatable<CubePosition> {
 
       // Store position
       public int XPos, YPos, ZPos;
@@ -54,6 +73,27 @@ namespace Net.Mateybyrd.GameWorld.Grid
 
       public override CubePosition[] GetNeighbours() {
         return Neighbours.Select(neighbour => new CubePosition(XPos + neighbour.XPos, YPos + neighbour.YPos, ZPos + neighbour.ZPos)).ToArray();
+      }
+
+      public bool Equals(CubePosition pos) {
+        return (XPos == pos.XPos && YPos == pos.YPos && ZPos == pos.ZPos);
+      }
+
+      public override bool Equals(object o) {
+        return Equals(o as CubePosition);
+      }
+
+      public override int GetHashCode() {
+        unchecked {
+          var hashCode = XPos;
+          hashCode = (hashCode*397) ^ YPos;
+          hashCode = (hashCode*397) ^ ZPos;
+          return hashCode;
+        }
+      }
+
+      public override string ToString() {
+        return "Cube [ " + XPos + ", " + YPos + ", " + ZPos + "]";
       }
     }
 
@@ -77,5 +117,9 @@ namespace Net.Mateybyrd.GameWorld.Grid
       }
 
       public AxialPosition(int q, int r) : base(q, -q-r, r) { }
+
+      public override string ToString() {
+        return "Axial [ " + Q + ", " + R + "]";
+      }
     }
 }

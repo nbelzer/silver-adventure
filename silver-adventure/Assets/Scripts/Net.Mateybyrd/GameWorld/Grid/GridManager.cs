@@ -18,7 +18,7 @@ namespace Net.Mateybyrd.GameWorld.Grid {
       try {
         _tiles.Add(tile.GridPosition, tile);
       } catch (Exception e) {
-        UnityEngine.Debug.LogError("Could not add the tile you wanted: " + e);
+        UnityEngine.Debug.LogError("Could not add the tile (" + tile.GridPosition + ")you wanted: " + e);
       }
     }
 
