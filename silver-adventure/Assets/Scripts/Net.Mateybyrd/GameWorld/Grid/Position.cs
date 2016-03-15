@@ -1,24 +1,24 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Net.Mateybyrd.GameWorld.Grid
 {
-  
   /// <summary>
   /// A Position<T> class should implement the given methods and a way of storing the position.
   /// </summary>
-  public abstract class Position<T>
+  public abstract class Position
   {
     public static readonly float TileSize = 1f;
     /// <summary>
     /// Returns all the neighbours of this coordinate.
     /// </summary>
-    public abstract T[] GetNeighbours();
+    public abstract Position[] GetNeighbours();
+
+    public abstract Vector3 GetWorldPosition();
   }
 
-  public class GridPosition: Position<GridPosition>, IEquatable<GridPosition> {
+  public class GridPosition: Position, IEquatable<GridPosition> {
 
     // Store position
     public int XPos, YPos;
@@ -39,11 +39,11 @@ namespace Net.Mateybyrd.GameWorld.Grid
       YPos = (int) (worldPosition.y / TileSize);
     }
 
-    public Vector3 GetWorldPosition() {
+    public override Vector3 GetWorldPosition() {
       return new Vector3(TileSize * XPos, TileSize * YPos, 0);
     }
 
-    public override GridPosition[] GetNeighbours() {
+    public override Position[] GetNeighbours() {
       return Neighbours.Select(neighbour => new GridPosition(XPos + neighbour.XPos, YPos + neighbour.YPos)).ToArray();
     }
 
@@ -66,7 +66,7 @@ namespace Net.Mateybyrd.GameWorld.Grid
     }
   }
 
-  public class CubePosition: Position<CubePosition>, IEquatable<CubePosition> {
+  public class CubePosition: Position, IEquatable<CubePosition> {
 
     // Store position
     public int XPos, YPos, ZPos;
@@ -92,11 +92,11 @@ namespace Net.Mateybyrd.GameWorld.Grid
       YPos = -XPos -ZPos;
     }
 
-    public override CubePosition[] GetNeighbours() {
+    public override Position[] GetNeighbours() {
       return Neighbours.Select(neighbour => new CubePosition(XPos + neighbour.XPos, YPos + neighbour.YPos, ZPos + neighbour.ZPos)).ToArray();
     }
     
-    public Vector3 GetWorldPosition() {
+    public override Vector3 GetWorldPosition() {
       var x = (float) (TileSize * Mathf.Sqrt(3) * (XPos + ZPos / 2.0));
       var y = (float) (TileSize * 3.0 / 2.0 * ZPos);
       return new Vector3(x, y, 0);

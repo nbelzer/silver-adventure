@@ -1,21 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using Net.Mateybyrd.GameWorld;
 using Net.Mateybyrd.GameWorld.Grid;
 
 namespace Net.Mateybyrd {
   
   public class TestScript : MonoBehaviour {
 
-    public GameWorld<CubePosition> World;
+    public GameWorld.GameWorld World;
 
     // Use this for initialization
     void Start () {
-      World = new GameWorld<CubePosition>();
+      World = new GameWorld.GameWorld();
       CreateSampleWorld(5);
 
       foreach (var item in World.Grid.GetTileAt(new CubePosition(1, 1, -2)).GridPosition.GetNeighbours()) {
-        Debug.Log(item.XPos + ", " + item.YPos + ", " + item.ZPos);
+        if (item.GetType() != typeof(CubePosition)) continue;
+        var cube = (CubePosition) item;
+        Debug.Log(cube.ToString());
       }
     }
 
@@ -25,7 +26,7 @@ namespace Net.Mateybyrd {
     }
     
     void OnDrawGizmos() {
-      foreach (KeyValuePair<CubePosition, Tile<CubePosition>> pair in World.Grid.GetGrid()) {
+      foreach (KeyValuePair<Position, Tile> pair in World.Grid.GetGrid()) {
         Gizmos.DrawCube(pair.Key.GetWorldPosition(), Vector3.one * 0.5f);
       }
     }
@@ -36,7 +37,7 @@ namespace Net.Mateybyrd {
           var y = -x-z;
 
           if (y >= -gridSize && y <= gridSize) {
-            World.Grid.AddTile(new Tile<CubePosition>(new CubePosition(x, y ,z), Vector3.zero));
+            World.Grid.AddTile(new Tile(new CubePosition(x, y ,z), Vector3.zero));
           }
         }
       }
