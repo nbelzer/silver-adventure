@@ -30,7 +30,7 @@ public class Test_GridGenerator {
         var y = -x-z;
 
         if (y >= -gridSize && y <= gridSize) {
-          _world.Grid.AddTile(new Tile(new CubePosition(x, y ,z), Vector3.zero));
+          _world.Grid.AddTile(new Tile(new CubePosition(x, y ,z), Vector3.zero, 0, null));
         }
       }
     }

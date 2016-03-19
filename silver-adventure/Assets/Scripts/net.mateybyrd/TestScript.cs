@@ -8,12 +8,10 @@ namespace Net.Mateybyrd {
 
     // Use this for initialization
     void Start () {
-      World = new GameWorld.GameWorld();
     }
 
     // Update is called once per frame
     void Update () { 
-        
     }
   }
 }
