@@ -42,7 +42,7 @@ namespace Net.Mateybyrd.GameWorld {
     }
     
     public void CreateTile(AxialPosition pos, float height) {
-      var tile = GameObject.Instantiate(tilePrefab, pos.GetWorldPosition() + Vector3.up * height * 20, Quaternion.identity) as GameObject;
+      var tile = GameObject.Instantiate(tilePrefab, pos.GetWorldPosition() + Vector3.up * height * 10, Quaternion.identity) as GameObject;
       tile.transform.SetParent(this.transform);
       Grid.AddTile(new Tile(pos, pos.GetWorldPosition(), height, tile));
     }

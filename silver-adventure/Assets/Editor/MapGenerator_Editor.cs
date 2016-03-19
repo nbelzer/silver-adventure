@@ -11,6 +11,9 @@ public class MapGeneratorEditor : Editor {
     if (DrawDefaultInspector()) {
       if (mapGen.autoUpdate) {
         mapGen.GenerateMap();
+        var world = FindObjectOfType<GameWorld>();
+        world.ResetWorld();
+        world.GenerateWorld(10);
       }
     }
     
