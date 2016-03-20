@@ -14,28 +14,18 @@ namespace Net.Mateybyrd.GameWorld {
     public int PoolSize; 
     public AnimationCurve Height;
     
-    public GameObject tilePrefab;
+    public GameObject TilePrefab;
     
     void Start() {
       Grid = new GridManager();
-      PoolManager.instance.CreatePool(tilePrefab, PoolSize);
+      PoolManager.instance.CreatePool(TilePrefab, PoolSize);
       GenerateWorld();
-      StartCoroutine(Animate());
-    }
-    
-    IEnumerator Animate() {
-      while(true) {
-        Generator.offset.y+=0.005f;
-        ResetWorld();
-        GenerateWorld();
-        yield return null;
-      }
     }
 
     public void GenerateWorld() {
       Generator = FindObjectOfType<MapGenerator>();
-      Generator.mapWidth = 2 * MapSize + 1;
-      Generator.mapHeight = 2* MapSize + 1;
+      Generator.MapWidth = 2 * MapSize + 1;
+      Generator.MapHeight = 2* MapSize + 1;
       var heightMap = Generator.GenerateMap();
       
       for (var q = -MapSize; q <= MapSize; q++) {
@@ -52,7 +42,7 @@ namespace Net.Mateybyrd.GameWorld {
     
     public void ResetWorld() {
       if (Grid != null) {
-        foreach (KeyValuePair<Position, Tile> tile in Grid.GetGrid()) {
+        foreach (var tile in Grid.GetGrid()) {
           tile.Value.TileObject.SetActive(false);
         }
       }
@@ -60,9 +50,9 @@ namespace Net.Mateybyrd.GameWorld {
     }
     
     public void CreateTile(AxialPosition pos, float height) {
-      var tile = PoolManager.instance.ReuseObject(tilePrefab,  pos.GetWorldPosition() + Vector3.up * Height.Evaluate(height), Quaternion.identity).gameObject;
-      // var tile = GameObject.Instantiate(tilePrefab,, Quaternion.identity) as GameObject;
-      // tile.transform.SetParent(this.transform);
+      var tile = PoolManager.instance.ReuseObject(TilePrefab,
+        pos.GetWorldPosition() + Vector3.up * Height.Evaluate(height),
+        Quaternion.identity).gameObject;
       Grid.AddTile(new Tile(pos, pos.GetWorldPosition(), height, tile));
     }
   }

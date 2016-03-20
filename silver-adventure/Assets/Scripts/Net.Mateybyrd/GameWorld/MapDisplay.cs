@@ -3,7 +3,7 @@
 namespace Net.Mateybyrd.GameWorld {
   public class MapDisplay : MonoBehaviour {
 
-    public Renderer textureRenderer;
+    public Renderer TextureRenderer;
 
     public void DrawNoiseMap(float[,] noiseMap) {
       var width = noiseMap.GetLength(0);
@@ -21,8 +21,8 @@ namespace Net.Mateybyrd.GameWorld {
       texture.SetPixels(colourMap);
       texture.Apply();
       
-      textureRenderer.sharedMaterial.mainTexture = texture;
-      textureRenderer.transform.localScale = new Vector3(width, 1, height);
+      TextureRenderer.sharedMaterial.mainTexture = texture;
+      TextureRenderer.transform.localScale = new Vector3(width, 1, height);
     }
   }
 }

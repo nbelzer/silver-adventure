@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:eb40b2ba93eca88fc3a7c2197201b69d56c13c34b7383c9d5cbcdc7dfc3d67af
-size 1520
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{D8A1714F-AFC5-89A1-19C4-36B3E15CD94F}") = "silver-adventure", "Assembly-CSharp.csproj", "{751CDFCF-175A-00C2-2F07-4D4585617AB9}"
+EndProject
+Project("{D8A1714F-AFC5-89A1-19C4-36B3E15CD94F}") = "silver-adventure", "Assembly-CSharp-Editor.csproj", "{58C039B2-7C1A-3432-AF1F-BE82426B8F52}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{751CDFCF-175A-00C2-2F07-4D4585617AB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{751CDFCF-175A-00C2-2F07-4D4585617AB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{751CDFCF-175A-00C2-2F07-4D4585617AB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{751CDFCF-175A-00C2-2F07-4D4585617AB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58C039B2-7C1A-3432-AF1F-BE82426B8F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58C039B2-7C1A-3432-AF1F-BE82426B8F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58C039B2-7C1A-3432-AF1F-BE82426B8F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58C039B2-7C1A-3432-AF1F-BE82426B8F52}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
