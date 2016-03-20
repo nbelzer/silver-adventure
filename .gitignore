@@ -10,3 +10,5 @@ silver-adventure/Assets/Plugins/
 *.sln.iml
 *.csproj.DotSettings
 *.swp
+**/*.sln
+**/*.csproj

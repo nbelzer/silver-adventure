@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using Net.Mateybyrd.GameWorld.Grid;
 
@@ -19,6 +20,16 @@ namespace Net.Mateybyrd.GameWorld {
       Grid = new GridManager();
       PoolManager.instance.CreatePool(tilePrefab, PoolSize);
       GenerateWorld();
+      StartCoroutine(Animate());
+    }
+    
+    IEnumerator Animate() {
+      while(true) {
+        Generator.offset.y+=0.005f;
+        ResetWorld();
+        GenerateWorld();
+        yield return null;
+      }
     }
 
     public void GenerateWorld() {
@@ -42,14 +53,14 @@ namespace Net.Mateybyrd.GameWorld {
     public void ResetWorld() {
       if (Grid != null) {
         foreach (KeyValuePair<Position, Tile> tile in Grid.GetGrid()) {
-          tile.Value.TileObject.Destroy();
+          tile.Value.TileObject.SetActive(false);
         }
       }
       Grid = new GridManager();
     }
     
     public void CreateTile(AxialPosition pos, float height) {
-      var tile = PoolManager.instance.ReuseObject(tilePrefab,  pos.GetWorldPosition() + Vector3.up * Height.Evaluate(height), Quaternion.identity);
+      var tile = PoolManager.instance.ReuseObject(tilePrefab,  pos.GetWorldPosition() + Vector3.up * Height.Evaluate(height), Quaternion.identity).gameObject;
       // var tile = GameObject.Instantiate(tilePrefab,, Quaternion.identity) as GameObject;
       // tile.transform.SetParent(this.transform);
       Grid.AddTile(new Tile(pos, pos.GetWorldPosition(), height, tile));

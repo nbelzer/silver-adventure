@@ -50,7 +50,7 @@ namespace Net.Mateybyrd {
 
     public class ObjectInstance {
 
-      GameObject gameObject;
+      public GameObject gameObject;
       Transform transform;
 
       bool hasPoolObjectComponent;
