@@ -13,7 +13,8 @@ namespace Net.Mateybyrd.GameWorld {
     
     void Start() {
       Grid = new GridManager();
-      GenerateWorld(40);
+      PoolManager.instance.CreatePool(tilePrefab, 500);
+      GenerateWorld(10);
     }
 
     public void GenerateWorld(int mapSize) {
@@ -35,15 +36,16 @@ namespace Net.Mateybyrd.GameWorld {
     public void ResetWorld() {
       if (Grid != null) {
         foreach (KeyValuePair<Position, Tile> tile in Grid.GetGrid()) {
-        DestroyImmediate(tile.Value.TileObject);
+          tile.Value.TileObject.Destroy();
         }
       }
       Grid = new GridManager();
     }
     
     public void CreateTile(AxialPosition pos, float height) {
-      var tile = GameObject.Instantiate(tilePrefab, pos.GetWorldPosition() + Vector3.up * height * 10, Quaternion.identity) as GameObject;
-      tile.transform.SetParent(this.transform);
+      var tile = PoolManager.instance.ReuseObject(tilePrefab,  pos.GetWorldPosition() + Vector3.up * height * 10, Quaternion.identity);
+      // var tile = GameObject.Instantiate(tilePrefab,, Quaternion.identity) as GameObject;
+      // tile.transform.SetParent(this.transform);
       Grid.AddTile(new Tile(pos, pos.GetWorldPosition(), height, tile));
     }
   }

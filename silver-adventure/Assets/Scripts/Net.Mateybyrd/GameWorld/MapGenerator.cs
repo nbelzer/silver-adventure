@@ -23,7 +23,7 @@ namespace Net.Mateybyrd.GameWorld {
       float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistance, lacunarity, offset);
       
       MapDisplay display = FindObjectOfType<MapDisplay>();
-      display.DrawNoiseMap(noiseMap);
+      if (display != null) display.DrawNoiseMap(noiseMap);
       
       return noiseMap;
     }

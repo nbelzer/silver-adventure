@@ -21,7 +21,7 @@ public class MapGeneratorEditor : Editor {
       mapGen.GenerateMap();
       var world = FindObjectOfType<GameWorld>();
       world.ResetWorld();
-      world.GenerateWorld(5);
+      world.GenerateWorld(10);
     }
   }
 }
