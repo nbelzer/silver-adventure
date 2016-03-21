@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -15,11 +16,26 @@ namespace Net.Mateybyrd.GameWorld {
     public AnimationCurve Height;
     
     public GameObject TilePrefab;
+    public float WaterLevel;
+    public Gradient Water;
+    public Gradient Terrain;
     
     void Start() {
       Grid = new GridManager();
       PoolManager.instance.CreatePool(TilePrefab, PoolSize);
       GenerateWorld();
+      StartCoroutine(Animate());
+    }
+
+    private IEnumerator Animate() {
+      while (true)
+      {
+        Generator.Offset.x += 0.1f * Time.deltaTime;
+        Generator.Offset.y += 0.2f * Time.deltaTime;
+        ResetWorld();
+        GenerateWorld();
+        yield return null;
+      }
     }
 
     public void GenerateWorld() {
@@ -50,10 +66,20 @@ namespace Net.Mateybyrd.GameWorld {
     }
     
     public void CreateTile(AxialPosition pos, float height) {
-      var tile = PoolManager.instance.ReuseObject(TilePrefab,
+      var tileObject = PoolManager.instance.ReuseObject(TilePrefab,
         pos.GetWorldPosition() + Vector3.up * Height.Evaluate(height),
         Quaternion.identity).gameObject;
-      Grid.AddTile(new Tile(pos, pos.GetWorldPosition(), height, tile));
+      var tile = new Tile(pos, pos.GetWorldPosition(), height, tileObject);
+      SetTileColor(tile);
+      Grid.AddTile(tile);
+    }
+
+    private void SetTileColor(Tile t) {
+      if (t.Height < WaterLevel) {
+        t.TileObject.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", Water.Evaluate(t.Height/WaterLevel));
+      } else {
+        t.TileObject.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", Terrain.Evaluate((t.Height-WaterLevel)/(1-WaterLevel)));
+      }
     }
   }
 }

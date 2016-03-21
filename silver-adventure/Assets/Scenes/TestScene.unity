@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692492, g: 0.4967869, b: 0.57508546, a: 1}
+  m_IndirectSpecularColor: {r: 0.44692534, g: 0.49678725, b: 0.57508564, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 116073e40b36b43eda6b2d6039b74429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureRenderer: {fileID: 793080128}
+  TextureRenderer: {fileID: 793080128}
 --- !u!1 &1110435252
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Generator: {fileID: 1110435255}
   MapSize: 8
-  PoolSize: 10000
+  PoolSize: 1000
   Height:
     serializedVersion: 2
     m_Curve:
@@ -219,7 +219,7 @@ MonoBehaviour:
       inSlope: 0
       outSlope: 0
       tangentMode: 0
-    - time: 0.25
+    - time: 0.5
       value: 0
       inSlope: 0
       outSlope: 0
@@ -237,7 +237,110 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  tilePrefab: {fileID: 1000014256804084, guid: 16b4b1274bbee4ed58db71b35025604a, type: 2}
+  TilePrefab: {fileID: 1000014256804084, guid: 16b4b1274bbee4ed58db71b35025604a, type: 2}
+  WaterLevel: 0.5
+  Water:
+    key0:
+      serializedVersion: 2
+      rgba: 4290396439
+    key1:
+      serializedVersion: 2
+      rgba: 4293711419
+    key2:
+      serializedVersion: 2
+      rgba: 0
+    key3:
+      serializedVersion: 2
+      rgba: 0
+    key4:
+      serializedVersion: 2
+      rgba: 0
+    key5:
+      serializedVersion: 2
+      rgba: 0
+    key6:
+      serializedVersion: 2
+      rgba: 0
+    key7:
+      serializedVersion: 2
+      rgba: 0
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  Terrain:
+    key0:
+      serializedVersion: 2
+      rgba: 4282954275
+    key1:
+      serializedVersion: 2
+      rgba: 4281045510
+    key2:
+      serializedVersion: 2
+      rgba: 2050689
+    key3:
+      serializedVersion: 2
+      rgba: 6447714
+    key4:
+      serializedVersion: 2
+      rgba: 0
+    key5:
+      serializedVersion: 2
+      rgba: 0
+    key6:
+      serializedVersion: 2
+      rgba: 0
+    key7:
+      serializedVersion: 2
+      rgba: 0
+    ctime0: 0
+    ctime1: 42405
+    ctime2: 45875
+    ctime3: 65535
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_NumColorKeys: 4
+    m_NumAlphaKeys: 2
+  Terrains:
+  - Name: Water
+    Height: 0
+    Color: {r: 0.02432957, g: 0.5562582, b: 0.66176474, a: 1}
+  - Name: LowLand
+    Height: 0.45
+    Color: {r: 0.22577855, g: 0.85294116, b: 0.30795842, a: 1}
+  - Name: HighLand
+    Height: 0.6
+    Color: {r: 0.14135394, g: 0.625, b: 0.12408089, a: 1}
+  - Name: Mountains
+    Height: 0.8
+    Color: {r: 0.72794116, g: 0.51908255, b: 0.35861805, a: 1}
+  - Name: Snow
+    Height: 0.95
+    Color: {r: 0.50735295, g: 0.5222751, b: 0.5222751, a: 1}
 --- !u!4 &1110435254
 Transform:
   m_ObjectHideFlags: 0
@@ -262,15 +365,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4ebd17670ea4150aadd9478a20b088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapWidth: 41
-  mapHeight: 41
-  noiseScale: 6
-  octaves: 3
-  persistance: 0.5
-  lacunarity: 2
-  seed: 42
-  offset: {x: 0, y: 0}
-  autoUpdate: 1
+  MapWidth: 1
+  MapHeight: 1
+  NoiseScale: 8
+  Octaves: 3
+  Persistance: 0.3
+  Lacunarity: 3
+  Seed: 0
+  Offset: {x: 0, y: 0}
+  AutoUpdate: 0
 --- !u!1 &1160662097
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,7 +507,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3c88cff9636a4e9b806dc2b16c8fa60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  World: {fileID: 0}
 --- !u!81 &1634888052
 AudioListener:
   m_ObjectHideFlags: 0
@@ -466,10 +568,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1634888050}
-  m_LocalRotation: {x: 0.42660013, y: -0.33944437, z: 0.17670354, w: 0.8194912}
-  m_LocalPosition: {x: 10, y: 25, z: -10}
+  m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
+  m_LocalPosition: {x: 0, y: 25, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 55, y: -45, z: 0}
+  m_LocalEulerAnglesHint: {x: 55, y: -0, z: 0}
