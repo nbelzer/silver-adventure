@@ -20,11 +20,13 @@ namespace Net.Mateybyrd.GameWorld {
     public Gradient Water;
     public Gradient Terrain;
     
+    public bool Animation;
+    
     void Start() {
       Grid = new GridManager();
       PoolManager.instance.CreatePool(TilePrefab, PoolSize);
       GenerateWorld();
-      StartCoroutine(Animate());
+      if (Animation) StartCoroutine(Animate());
     }
 
     private IEnumerator Animate() {
