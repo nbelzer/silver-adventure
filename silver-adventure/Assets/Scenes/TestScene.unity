@@ -237,7 +237,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  TilePrefab: {fileID: 1000014256804084, guid: 16b4b1274bbee4ed58db71b35025604a, type: 2}
+  TilePrefab: {fileID: 1000013654267408, guid: 5d4734e82be3d4709b90424b65153f66, type: 2}
   WaterLevel: 0.5
   Water:
     key0:
@@ -541,10 +541,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1634888050}
-  m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: 0, y: 23, z: -15}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 55, y: -0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: 0}

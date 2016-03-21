@@ -69,8 +69,8 @@ namespace Net.Mateybyrd.GameWorld {
     
     public void CreateTile(AxialPosition pos, float height) {
       var tileObject = PoolManager.instance.ReuseObject(TilePrefab,
-        pos.GetWorldPosition() + Vector3.up * Height.Evaluate(height),
-        Quaternion.identity).gameObject;
+        pos.GetWorldPosition(),
+        TilePrefab.transform.rotation).gameObject;
       var tile = new Tile(pos, pos.GetWorldPosition(), height, tileObject);
       SetTileColor(tile);
       Grid.AddTile(tile);
@@ -78,9 +78,9 @@ namespace Net.Mateybyrd.GameWorld {
 
     private void SetTileColor(Tile t) {
       if (t.Height < WaterLevel) {
-        t.TileObject.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", Water.Evaluate(t.Height/WaterLevel));
+        t.TileObject.GetComponent<SpriteRenderer>().color = Water.Evaluate(t.Height/WaterLevel);
       } else {
-        t.TileObject.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", Terrain.Evaluate((t.Height-WaterLevel)/(1-WaterLevel)));
+        t.TileObject.GetComponent<SpriteRenderer>().color = Terrain.Evaluate((t.Height-WaterLevel)/(1-WaterLevel));
       }
     }
   }

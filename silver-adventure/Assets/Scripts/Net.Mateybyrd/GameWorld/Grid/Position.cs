@@ -40,7 +40,7 @@ namespace Net.Mateybyrd.GameWorld.Grid
     }
 
     public override Vector3 GetWorldPosition() {
-      return new Vector3(TileSize * XPos, 0, TileSize * YPos);
+      return new Vector3(TileSize * XPos, TileSize * YPos, 0);
     }
 
     public override Position[] GetNeighbours() {
@@ -99,7 +99,7 @@ namespace Net.Mateybyrd.GameWorld.Grid
     public override Vector3 GetWorldPosition() {
       var x = (float) (TileSize * Mathf.Sqrt(3) * (XPos + ZPos / 2.0));
       var y = (float) (TileSize * 3.0 / 2.0 * ZPos);
-      return new Vector3(x, 0, y);
+      return new Vector3(x, y, 0);
     }
 
     public bool Equals(CubePosition pos) {
