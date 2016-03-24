@@ -30,22 +30,17 @@ namespace Net.Mateybyrd.GameWorld {
       return noiseMap;
     }
 
-    void OnValidate()
-    {
-      if (MapWidth < 1)
-      {
+    void OnValidate() {
+      if (MapWidth < 1) {
         MapWidth = 1;
       }
-      if (MapHeight < 1)
-      {
+      if (MapHeight < 1) {
         MapHeight = 1;
       }
-      if (Lacunarity < 1)
-      {
+      if (Lacunarity < 1) {
         Lacunarity = 1;
       }
-      if (Octaves < 0)
-      {
+      if (Octaves < 0) {
         Octaves = 0;
       }
     }

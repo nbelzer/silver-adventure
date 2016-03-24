@@ -18,7 +18,9 @@ namespace Net.Mateybyrd.GameWorld {
     public GameObject TilePrefab;
     public float WaterLevel;
     public Gradient Water;
+    public Material WaterMaterial;
     public Gradient Terrain;
+    public Material LandMaterial;
     
     public bool Animation;
     
@@ -26,32 +28,46 @@ namespace Net.Mateybyrd.GameWorld {
       Grid = new GridManager();
       PoolManager.instance.CreatePool(TilePrefab, PoolSize);
       GenerateWorld();
-      if (Animation) StartCoroutine(Animate());
+      StartCoroutine(Animate());
+      
     }
 
     private IEnumerator Animate() {
       while (true)
       {
-        Generator.Offset.x += 0.1f * Time.deltaTime;
-        Generator.Offset.y += 0.2f * Time.deltaTime;
-        ResetWorld();
-        GenerateWorld();
-        yield return null;
+        if (Animation) {
+          Generator.Offset.x += 0.1f * Time.deltaTime;
+          Generator.Offset.y += 0.2f * Time.deltaTime;
+          UpdateWorld();
+        }
+        yield return new WaitForEndOfFrame();
       }
     }
-
+    
     public void GenerateWorld() {
       Generator = FindObjectOfType<MapGenerator>();
+      UpdateWorld();
+    }
+    
+    public void UpdateWorld() {
       Generator.MapWidth = 2 * MapSize + 1;
       Generator.MapHeight = 2* MapSize + 1;
+      
       var heightMap = Generator.GenerateMap();
+      var grid = Grid.GetGrid();
       
       for (var q = -MapSize; q <= MapSize; q++) {
         for (var r = -MapSize; r <= MapSize; r++) {
           
           var z = -q-r;
           if (z >= -MapSize && z <= MapSize) {
-            CreateTile(new AxialPosition(q, r), heightMap[q+MapSize,r+MapSize]);
+            var position = new AxialPosition(q, r);
+            
+            if (grid.ContainsKey(position)) {
+              UpdateTile(grid[position], heightMap[q+MapSize, r+MapSize]);
+            } else {
+              CreateTile(position, heightMap[q+MapSize,r+MapSize]);
+            }
           }
           
         }
@@ -75,13 +91,41 @@ namespace Net.Mateybyrd.GameWorld {
       SetTileColor(tile);
       Grid.AddTile(tile);
     }
+    
+    private void UpdateTile(Tile t, float height) {
+      t.Height = height;
+      SetTileColor(t);
+      SetTileHeight(t);
+    }
 
     private void SetTileColor(Tile t) {
-      if (t.Height < WaterLevel) {
-        t.TileObject.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", Water.Evaluate(t.Height/WaterLevel));
-      } else {
-        t.TileObject.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", Terrain.Evaluate((t.Height-WaterLevel)/(1-WaterLevel)));
+      var renderer = t.TileObject.GetComponentInChildren<MeshRenderer>();
+      var mesh = t.TileObject.GetComponentInChildren<MeshFilter>();
+      if (t.Height < WaterLevel)
+      {
+        var percentage = Mathf.Clamp(t.Height / WaterLevel, 0.01f, 0.99f);
+        renderer.material = WaterMaterial;
+        var newUvs = new Vector2[mesh.mesh.vertices.Length];
+        for (var i = 0; i < newUvs.Length; i++) {
+          newUvs[i] = new Vector2(percentage, 0);
+        }
+        mesh.mesh.uv = newUvs;
+      } else
+      {
+        var percentage = Mathf.Clamp((t.Height - WaterLevel) / (1-WaterLevel), 0.01f, 0.99f);
+        renderer.material = LandMaterial;
+        var newUvs = new Vector2[mesh.mesh.vertices.Length];
+        for (var i = 0; i < newUvs.Length; i++) {
+          newUvs[i] = new Vector2(percentage, 0);
+        }
+        mesh.mesh.uv = newUvs;
       }
     }
+    
+    private void SetTileHeight(Tile t) {
+      var pos = t.TileObject.transform.position;
+      pos.y = Height.Evaluate(t.Height);
+      t.TileObject.transform.position = pos;
+    }    
   }
 }

@@ -1,10 +1,11 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "files.exclude": {
-    "**/Materials/": true,
+    // "**/Materials/": true,
     "**/Prefabs/": true,
     "**/Scenes/": true,
-    "**/Models/": true
+    "**/Models/": true,
+    "**/Sprites/": true
     // "**/*.csproj": true,
     // "**/*.sln": true
   }
