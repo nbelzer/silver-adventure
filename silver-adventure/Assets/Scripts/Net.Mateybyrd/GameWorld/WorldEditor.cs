@@ -4,32 +4,69 @@ using Net.Mateybyrd.GameWorld.Grid;
 
 namespace Net.Mateybyrd.GameWorld {
   public class WorldEditor : MonoBehaviour {
+    public enum EditMode {
+      Select,
+      Move
+    } 
     
     public LayerMask TileLayer;
+    public EditMode editMode;
+    public int toolRadius;
+    
     public float stepSize;
     
     private List<Tile> selectedTiles = new List<Tile>();
     
     void Update() {
       var tile = GetTileFromRay();
-      if (tile != null) {
-        if (Input.GetMouseButton(0)) {
-          if (!selectedTiles.Contains(tile)) {
-            selectedTiles.Add(tile);
-          }
-        }
-        if (Input.GetMouseButton(1)) {
-          selectedTiles.Remove(tile);
-        }
+      
+      CheckModes();
+      CheckRadius();
+      
+      if (tile == null) return;
+      
+      switch (editMode) {
+        case EditMode.Select: 
+          SelectMode(tile);
+          break;
+        case EditMode.Move:
+          MoveTerrain(tile);
+          break;
+        default:
+          Debug.LogError("Editmode not recognized");
+          break;
       }
-      if (Input.GetKeyDown(KeyCode.D)) {
-        selectedTiles.Clear();
+    }
+    
+    private void CheckModes() {
+      if (Input.GetKeyDown(KeyCode.S)) editMode = EditMode.Select;
+      if (Input.GetKeyDown(KeyCode.A)) editMode = EditMode.Move;
+    }
+    
+    private void CheckRadius() {
+      if (Input.mouseScrollDelta.x > 0) {
+        toolRadius++;
+      } else if (Input.mouseScrollDelta.x < 0) {
+        toolRadius = Mathf.Max(toolRadius--, 1);;
+      }
+    }
+    
+    private void SelectMode(Tile t) {
+      if (Input.GetMouseButton(0)) {
+        if (!selectedTiles.Contains(t)) {
+          selectedTiles.Add(t);
+        }
+      } else if (Input.GetMouseButton(1)) {
+        selectedTiles.Remove(t);
       }
       
-      if (Input.GetKeyDown(KeyCode.Q)) {
+      if (Input.GetKeyDown(KeyCode.D)) selectedTiles.Clear();
+    }
+    
+    private void MoveTerrain(Tile t) {
+      if (Input.GetMouseButtonDown(0)) {
         MoveTiles(Vector3.up * stepSize);
-      }
-      if (Input.GetKeyDown(KeyCode.A)) {
+      } else if (Input.GetMouseButtonDown(1)) {
         MoveTiles(-Vector3.up * stepSize);
       }
     }
