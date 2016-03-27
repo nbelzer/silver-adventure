@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
@@ -16,6 +17,8 @@ namespace Net.Mateybyrd.GameWorld.Grid
     public abstract Position[] GetNeighbours();
 
     public abstract Vector3 GetWorldPosition();
+    
+    public abstract Position[] GetInRange(int range);
   }
 
   public class GridPosition: Position, IEquatable<GridPosition> {
@@ -37,6 +40,11 @@ namespace Net.Mateybyrd.GameWorld.Grid
     public GridPosition(Vector3 worldPosition) {
       XPos = (int) (worldPosition.x / TileSize);
       YPos = (int) (worldPosition.y / TileSize);
+    }
+    
+    public override Position[] GetInRange(int range) {
+      Debug.LogError("Method not implemented, you beter be fixing this sometime");
+      return null;
     }
 
     public override Vector3 GetWorldPosition() {
@@ -69,7 +77,7 @@ namespace Net.Mateybyrd.GameWorld.Grid
   public class CubePosition: Position, IEquatable<CubePosition> {
 
     // Store position
-    public int XPos, YPos, ZPos;
+    public float XPos, YPos, ZPos;
 
     private static readonly CubePosition[] Neighbours = {
       new CubePosition(-1,  0,  1), new CubePosition( 1,  0, -1),
@@ -77,20 +85,18 @@ namespace Net.Mateybyrd.GameWorld.Grid
       new CubePosition( 0,  1, -1), new CubePosition( 0, -1,  1)
     };
 
-    public CubePosition(int x, int y, int z) {
+    public CubePosition(float x, float y, float z) {
       XPos = x;
       YPos = y;
       ZPos = z;
     }
     
-    public CubePosition(Vector3 worldPosition) {
-      var x = (float) (worldPosition.x * Mathf.Sqrt(3) / 3.0f - worldPosition.z / 3.0);
-      XPos = (int) Mathf.Round(x/TileSize); 
-      
+    public static CubePosition CubeFromWorld(Vector3 worldPosition) {
+      var x = (float) (worldPosition.x * Mathf.Sqrt(3) / 3.0f - worldPosition.z / 3.0) / TileSize;
       var z = (float) (worldPosition.z * 2.0f / 3.0f / TileSize);
-      ZPos = (int) Mathf.Round(z);
+      var y = -x -z;
       
-      YPos = -XPos -ZPos;
+      return RoundCube(new CubePosition(x, y, z));
     }
 
     public override Position[] GetNeighbours() {
@@ -101,6 +107,40 @@ namespace Net.Mateybyrd.GameWorld.Grid
       var x = (float) (TileSize * Mathf.Sqrt(3) * (XPos + ZPos / 2.0));
       var y = (float) (TileSize * 3.0 / 2.0 * ZPos);
       return new Vector3(x, 0, y);
+    }
+    
+    public override Position[] GetInRange(int range) {
+      var results = new List<CubePosition>();
+      for (var dx = -range; dx <= range; dx++) {
+        for (var dy = Mathf.Max(-range, -dx-range); dy <= Mathf.Min(range, -dx+range); dy++) {
+          var dz = -dx-dy;
+          results.Add(new CubePosition(XPos + dx, YPos + dy, ZPos + dz));
+        }
+      }
+      return results.ToArray();
+    }
+    
+    public static CubePosition RoundCube(CubePosition c) {
+      var rx = Mathf.Round(c.XPos);
+      var ry = Mathf.Round(c.YPos);
+      var rz = Mathf.Round(c.ZPos);
+      
+      var x_diff = Mathf.Abs(rx - c.XPos);
+      var y_diff = Mathf.Abs(ry - c.YPos);
+      var z_diff = Mathf.Abs(rz - c.ZPos);
+      
+      if (x_diff > y_diff && x_diff > z_diff) {
+        rx = -ry-rz;
+      } else if (y_diff > z_diff) {
+        ry = -rx-rz;
+      } else {
+        rz = -rx-ry;
+      }
+      return new CubePosition(rx, ry, rz);
+    }
+    
+    public AxialPosition ToAxial() {
+      return new AxialPosition(XPos, ZPos);
     }
 
     public bool Equals(CubePosition pos) {
@@ -113,9 +153,9 @@ namespace Net.Mateybyrd.GameWorld.Grid
 
     public override int GetHashCode() {
       unchecked {
-        var hashCode = XPos;
-        hashCode = (hashCode*397) ^ YPos;
-        hashCode = (hashCode*397) ^ ZPos;
+        var hashCode = (int)XPos;
+        hashCode = (hashCode*397) ^ ((int)YPos);
+        hashCode = (hashCode*397) ^ ((int)ZPos);
         return hashCode;
       }
     }
@@ -127,7 +167,7 @@ namespace Net.Mateybyrd.GameWorld.Grid
 
   public class AxialPosition: CubePosition {
 
-    public int Q {
+    public float Q {
       get {
         return XPos;
       }
@@ -135,7 +175,7 @@ namespace Net.Mateybyrd.GameWorld.Grid
         XPos = value;
       }
     }
-    public int R {
+    public float R {
       get {
         return ZPos;
       }
@@ -144,8 +184,10 @@ namespace Net.Mateybyrd.GameWorld.Grid
       }
     }
 
-    public AxialPosition(int q, int r) : base(q, -q-r, r) { }
-    public AxialPosition(Vector3 worldPosition) : base(worldPosition) {}
+    public AxialPosition(float q, float r) : base(q, -q-r, r) { }
+    public static AxialPosition AxialFromWorld(Vector3 worldPosition) {
+      return CubeFromWorld(worldPosition).ToAxial();
+    }
 
     public override string ToString() {
       return "Axial [ " + Q + ", " + R + "]";

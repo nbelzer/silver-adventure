@@ -15,22 +15,23 @@ namespace Net.Mateybyrd.GameWorld {
     
     public float stepSize;
     
+    private Tile mouseTile;
     private List<Tile> selectedTiles = new List<Tile>();
     
     void Update() {
-      var tile = GetTileFromRay();
+      mouseTile = GetTileFromRay();
       
       CheckModes();
       CheckRadius();
       
-      if (tile == null) return;
+      if (mouseTile == null) return;
       
       switch (editMode) {
         case EditMode.Select: 
-          SelectMode(tile);
+          SelectMode(mouseTile);
           break;
         case EditMode.Move:
-          MoveTerrain(tile);
+          MoveTerrain(mouseTile);
           break;
         default:
           Debug.LogError("Editmode not recognized");
@@ -44,20 +45,27 @@ namespace Net.Mateybyrd.GameWorld {
     }
     
     private void CheckRadius() {
-      if (Input.mouseScrollDelta.x > 0) {
+      if (Input.mouseScrollDelta.y > 0) {
         toolRadius++;
-      } else if (Input.mouseScrollDelta.x < 0) {
-        toolRadius = Mathf.Max(toolRadius--, 1);;
+      } else if (Input.mouseScrollDelta.y < 0) {
+        toolRadius = Mathf.Max(toolRadius-1, 0);
       }
     }
     
     private void SelectMode(Tile t) {
       if (Input.GetMouseButton(0)) {
-        if (!selectedTiles.Contains(t)) {
-          selectedTiles.Add(t);
+        foreach (CubePosition c in t.GridPosition.GetInRange(toolRadius)) {
+          var tile = GameWorld.Grid.GetTileAt(c);
+          if (tile == null) continue;
+          if (selectedTiles.Contains(tile)) continue;
+          selectedTiles.Add(tile);
         }
       } else if (Input.GetMouseButton(1)) {
-        selectedTiles.Remove(t);
+        foreach (CubePosition c in t.GridPosition.GetInRange(toolRadius)) {
+          var tile = GameWorld.Grid.GetTileAt(c);
+          if (tile == null) continue;
+          selectedTiles.Remove(tile);
+        }
       }
       
       if (Input.GetKeyDown(KeyCode.D)) selectedTiles.Clear();
@@ -81,8 +89,8 @@ namespace Net.Mateybyrd.GameWorld {
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
       RaycastHit hit;
       if (Physics.Raycast(ray, out hit, 50f, TileLayer)) {
-      Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red, 2f);
-        var axial = new AxialPosition(hit.point);
+      // Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red, 2f);
+        var axial = AxialPosition.AxialFromWorld(hit.point);
         
         return GameWorld.Grid.GetTileAt(axial);
       } else {
@@ -91,10 +99,24 @@ namespace Net.Mateybyrd.GameWorld {
     }
     
     void OnDrawGizmos() {
+      if (mouseTile != null) { 
+        Gizmos.color = Color.blue;
+        foreach (CubePosition c in mouseTile.GridPosition.GetInRange(toolRadius)) {
+          var t = GameWorld.Grid.GetTileAt(c);
+          if (t != null) {
+            DrawCubeAtTile(t);
+          }
+        }
+      }
+      
       foreach (Tile t in selectedTiles) {
         Gizmos.color = Color.red;
-        Gizmos.DrawCube(t.GridPosition.GetWorldPosition() + Vector3.up * (5 + t.TileObject.transform.position.y), Vector3.one);
+        DrawCubeAtTile(t);
       }
+    }
+    
+    private void DrawCubeAtTile(Tile t) {
+      Gizmos.DrawCube(t.GridPosition.GetWorldPosition() + Vector3.up * (5 + t.TileObject.transform.position.y), Vector3.one);
     }
   }
 }
