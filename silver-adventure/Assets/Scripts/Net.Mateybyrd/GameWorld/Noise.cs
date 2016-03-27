@@ -17,8 +17,8 @@ namespace Net.Mateybyrd.GameWorld{
         octaveOffsets[i] = new Vector2(offsetX, offsetY);
       }
       
-      var maxNoiseHeight = float.MinValue;
-      var minNoiseHeight = float.MaxValue;
+      // var maxNoiseHeight = float.MinValue;
+      // var minNoiseHeight = float.MaxValue;
       
       var halfWidth = mapWidth / 2f;
       var halfHeight = mapHeight / 2f;
@@ -34,18 +34,18 @@ namespace Net.Mateybyrd.GameWorld{
             var sampleX = (x - halfWidth)/scale * frequency + octaveOffsets[i].x;
             var sampleY = (y - halfHeight)/scale * frequency + octaveOffsets[i].y;;
 
-            var perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
+            var perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1f;
             noiseHeight += perlinValue * amplitude;
             
             amplitude *= persistance;
             frequency *= lacunarity;
           }
           
-          if (noiseHeight > maxNoiseHeight) {
-            maxNoiseHeight = noiseHeight;
-          } else if (noiseHeight < minNoiseHeight) {
-            minNoiseHeight = noiseHeight;
-          }
+          // if (noiseHeight > maxNoiseHeight) {
+          //   maxNoiseHeight = noiseHeight;
+          // } else if (noiseHeight < minNoiseHeight) {
+          //   minNoiseHeight = noiseHeight;
+          // }
           
           noiseMap[x, y] = noiseHeight;
         }
@@ -53,7 +53,7 @@ namespace Net.Mateybyrd.GameWorld{
       
       for (var y = 0; y < mapHeight; y++) {
         for (var x = 0; x < mapWidth; x++) {
-          noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
+          noiseMap[x, y] = Mathf.InverseLerp(-1f, 1f, noiseMap[x, y]);
         }
       }
 

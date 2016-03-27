@@ -84,11 +84,12 @@ namespace Net.Mateybyrd.GameWorld.Grid
     }
     
     public CubePosition(Vector3 worldPosition) {
-      var x = (float) (worldPosition.x * Mathf.Sqrt(3) / 3.0 - worldPosition.y / 3.0);
+      var x = (float) (worldPosition.x * Mathf.Sqrt(3) / 3.0f - worldPosition.z / 3.0);
       XPos = (int) Mathf.Round(x/TileSize); 
       
-      var z = (float) (worldPosition.y * 2.0 / 3.0 / TileSize);
+      var z = (float) (worldPosition.z * 2.0f / 3.0f / TileSize);
       ZPos = (int) Mathf.Round(z);
+      
       YPos = -XPos -ZPos;
     }
 
