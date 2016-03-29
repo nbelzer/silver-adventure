@@ -5,7 +5,6 @@ using Net.Mateybyrd.GameWorld.Grid;
 namespace Net.Mateybyrd.GameWorld {
   public class WorldEditor : MonoBehaviour {
     public enum EditMode {
-      Select,
       Move
     } 
     
@@ -26,10 +25,8 @@ namespace Net.Mateybyrd.GameWorld {
       
       if (mouseTile == null) return;
       
+      SelectMode(mouseTile);
       switch (editMode) {
-        case EditMode.Select: 
-          SelectMode(mouseTile);
-          break;
         case EditMode.Move:
           MoveTerrain(mouseTile);
           break;
@@ -40,8 +37,7 @@ namespace Net.Mateybyrd.GameWorld {
     }
     
     private void CheckModes() {
-      if (Input.GetKeyDown(KeyCode.S)) editMode = EditMode.Select;
-      if (Input.GetKeyDown(KeyCode.A)) editMode = EditMode.Move;
+      if (Input.GetKeyDown(KeyCode.E)) editMode = EditMode.Move;
     }
     
     private void CheckRadius() {
@@ -71,11 +67,32 @@ namespace Net.Mateybyrd.GameWorld {
       if (Input.GetKeyDown(KeyCode.D)) selectedTiles.Clear();
     }
     
+    private void SmoothSelectedTerrain() {
+      foreach (Tile tile in selectedTiles) {
+        var height = 0f;
+        var count = 0;
+        foreach (Position neigh in tile.GridPosition.GetNeighbours()) {
+          var neighbour = GameWorld.Grid.GetTileAt(neigh);
+          if (neighbour != null) {
+            height += neighbour.TileObject.transform.position.y;
+            count++;
+          }
+        }
+        var average = Mathf.Round( (height / count) / stepSize)  * stepSize; 
+        tile.TileObject.transform.position += Vector3.up * (average - tile.TileObject.transform.position.y);
+      }
+    }
+    
     private void MoveTerrain(Tile t) {
-      if (Input.GetMouseButtonDown(0)) {
+      if (Input.GetKeyDown(KeyCode.Q)) {
         MoveTiles(Vector3.up * stepSize);
-      } else if (Input.GetMouseButtonDown(1)) {
+      } else if (Input.GetKeyDown(KeyCode.A)) {
         MoveTiles(-Vector3.up * stepSize);
+      }
+      
+      
+      if (Input.GetKeyDown(KeyCode.S)) {
+        SmoothSelectedTerrain();
       }
     }
     
@@ -100,23 +117,28 @@ namespace Net.Mateybyrd.GameWorld {
     
     void OnDrawGizmos() {
       if (mouseTile != null) { 
-        Gizmos.color = Color.blue;
         foreach (CubePosition c in mouseTile.GridPosition.GetInRange(toolRadius)) {
           var t = GameWorld.Grid.GetTileAt(c);
           if (t != null) {
-            DrawCubeAtTile(t);
+            Gizmos.color = new Color(0.09f, .757f, .647f); // Teal
+            DrawCubeAtTile(t, 1.5f);
           }
         }
       }
       
       foreach (Tile t in selectedTiles) {
-        Gizmos.color = Color.red;
-        DrawCubeAtTile(t);
+        Gizmos.color = new Color(.153f, .392f, .773f); // Blue
+        DrawCubeAtTile(t, 0.8f);
+      }
+      
+      if (mouseTile != null) {
+        Gizmos.color = new Color(1f, .475f, .118f); // Orange
+        DrawCubeAtTile(mouseTile, 1.5f);
       }
     }
     
-    private void DrawCubeAtTile(Tile t) {
-      Gizmos.DrawCube(t.GridPosition.GetWorldPosition() + Vector3.up * (5 + t.TileObject.transform.position.y), Vector3.one);
+    private void DrawCubeAtTile(Tile t, float scale) {
+      Gizmos.DrawCube(t.GridPosition.GetWorldPosition() + Vector3.up * (5 + t.TileObject.transform.position.y), Vector3.one * 0.5f * scale);
     }
   }
 }
