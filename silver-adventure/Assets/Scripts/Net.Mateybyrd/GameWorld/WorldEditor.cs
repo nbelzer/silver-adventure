@@ -62,9 +62,31 @@ namespace Net.Mateybyrd.GameWorld {
           if (tile == null) continue;
           selectedTiles.Remove(tile);
         }
+      } 
+      
+      if (Input.GetKeyDown(KeyCode.G)) {
+        selectedTiles.AddRange(GetTilesAtHeight(mouseTile.TileObject.transform.position.y));
       }
       
-      if (Input.GetKeyDown(KeyCode.D)) selectedTiles.Clear();
+      if (Input.GetKeyDown(KeyCode.D)) {
+        if (Input.GetKey(KeyCode.LeftShift)) {
+          foreach (Tile heightTile in GetTilesAtHeight(mouseTile.TileObject.transform.position.y)) {
+            selectedTiles.Remove(heightTile);
+          }
+        } else {
+          selectedTiles.Clear();
+        }
+      } 
+    }
+    
+    private Tile[] GetTilesAtHeight(float height) {
+      var filledPosition = new List<Tile>();
+      foreach (var pair in GameWorld.Grid.GetGrid()) {
+        if (pair.Value.TileObject.transform.position.y == height) {
+          filledPosition.Add(pair.Value);
+        }
+      }
+      return filledPosition.ToArray();
     }
     
     private void SmoothSelectedTerrain() {

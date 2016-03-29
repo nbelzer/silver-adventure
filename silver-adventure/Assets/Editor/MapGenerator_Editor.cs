@@ -15,20 +15,19 @@ public class MapGeneratorEditor : Editor {
 
     var mapGen = (MapGenerator) target;
 
-    if (DrawDefaultInspector()) {
-      if (mapGen.AutoUpdate) {
-        mapGen.GenerateMap();
-        var world = FindObjectOfType<GameWorld>();
-        world.ResetWorld();
-        world.GenerateWorld();
-      }
-    }
+    // if (DrawDefaultInspector()) {
+    //   if (mapGen.AutoUpdate) {
+    //     mapGen.GenerateMap();
+    //     var world = FindObjectOfType<GameWorld>();
+    //     world.UpdateWorld();
+    //   }
+    // }
 
     if (GUILayout.Button("Generate")) {
       mapGen.GenerateMap();
       var world = FindObjectOfType<GameWorld>();
       world.ResetWorld();
-      world.GenerateWorld();
+      world.GenerateWorld(true);
     }
   }
 }

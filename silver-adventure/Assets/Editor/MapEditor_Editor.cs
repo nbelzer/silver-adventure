@@ -5,8 +5,9 @@ using Net.Mateybyrd.GameWorld;
 
 public class MapEditor : EditorWindow {
   
-  Vector2 mapSize;
+  MapGenerator generator;
   GameWorld world;
+  WorldEditor editor;
 
   [MenuItem ("MateyByrd/MapEditor")]
   static void Init() {
@@ -21,6 +22,12 @@ public class MapEditor : EditorWindow {
         world = new GameWorld();
       }
     }
+    if (generator == null) {
+      generator = FindObjectOfType<MapGenerator>();
+    }
+    if (editor == null) {
+      editor = FindObjectOfType<WorldEditor>();
+    }
     
     EditorGUI.DrawRect(new Rect(0, 0, 400, 40), Color.gray);
     EditorGUILayout.Space();
@@ -29,11 +36,33 @@ public class MapEditor : EditorWindow {
     
     EditorGUI.indentLevel++;
       GUILayout.Label("Base settings", EditorStyles.boldLabel);
-        mapSize = EditorGUILayout.Vector2Field("Map Size", mapSize);
+        world.MapSize = EditorGUILayout.IntField("Map Size", world.MapSize);
+        generator.MapWidth = world.MapSize * 2 + 1;
+        generator.MapHeight = world.MapSize * 2 + 1;
+        generator.NoiseScale = EditorGUILayout.FloatField("Noise scale", generator.NoiseScale);
+        generator.Octaves = EditorGUILayout.IntField("Octaves", generator.Octaves);
+        generator.Persistance = EditorGUILayout.Slider("Persistance", generator.Persistance, 0, 1f);
+        generator.Lacunarity = EditorGUILayout.FloatField("Lacunarity", generator.Lacunarity);
+        generator.Seed = EditorGUILayout.IntField("Seed", generator.Seed);
+        generator.Offset = EditorGUILayout.Vector2Field("Offset", generator.Offset);
     EditorGUI.indentLevel--;
     
-    if (GUILayout.Button("Generate map")) {
-      GenerateFlatTerrain(mapSize);
+    EditorGUI.indentLevel++;
+      GUILayout.Label("Editor settings", EditorStyles.boldLabel);
+      world.WaterLevel = EditorGUILayout.Slider("Water level", world.WaterLevel, 0, 0.6f);
+      editor.stepSize = Mathf.Clamp(Mathf.Round(EditorGUILayout.FloatField("Step size", editor.stepSize)/ 0.05f) * 0.05f, 0.05f, 10f);
+      editor.toolRadius = EditorGUILayout.IntSlider("Tool radius", editor.toolRadius, 0, world.MapSize);
+    EditorGUI.indentLevel--;
+    
+    
+    EditorGUILayout.Space();
+    GUILayout.Label("Generate buttons", EditorStyles.boldLabel);
+    
+    if (GUILayout.Button("Generate flat map")) {
+      GenerateFlatTerrain();
+    }
+    if (GUILayout.Button("Generate random map")) {
+      GenerateRandomTerrain();
     }
     if (GUILayout.Button("Randomization map")) {
       world.RandomAlterations();
@@ -47,7 +76,11 @@ public class MapEditor : EditorWindow {
     }
   }
   
-  void GenerateFlatTerrain(Vector2 mapSize) {
-    world.GenerateWorld();
+  void GenerateFlatTerrain() {
+    world.GenerateWorld(false);
+  }
+  
+  void GenerateRandomTerrain() {
+    world.GenerateWorld(true);
   }
 }
